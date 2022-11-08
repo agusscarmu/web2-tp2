@@ -25,29 +25,29 @@ class PacienteApiController {
     public function getPacientes($params = null) {
         $order = $_GET['order'];
         $direction = $_GET['direction'];
-        // verifico que exista 'page' y 'limit' para transformarlo en int
-        if(isset($_GET['page'])&&isset($_GET['limit'])){
-            $page = (int) $_GET['page'];
-            $limit = (int) $_GET['limit'];
-        }
+        $page = $_GET['page'];
+        $limit = $_GET['limit'];
+    
         if(!$order==null){
             if ((in_array($order,$this->model->getColumns())&&(($direction==null)||($direction=='ASC')||($direction=='DESC')))) { // compruebo que el get obtenido sea correcto
                 $pacientes = $this->model->getAllOrderBy($order, $direction);
                 // si 'page' y 'limit' son de tipo int, selecciono la pagina indicada
-                if((is_int($page))&(is_int($limit))){
+                if (isset($page)&&isset($limit)&&((filter_var($page, FILTER_VALIDATE_INT) == false)||(filter_var($limit, FILTER_VALIDATE_INT) == false))){ //valido que los parametros sean integer
+                    $this->view->response("Pagina o limite no especificados", 400);
+                }else{
                     $pacientes = array_slice($pacientes, $page*$limit, $limit);
+                    $this->view->response($pacientes);
                 }
-                $this->view->response($pacientes);
             }else{
                 $this->view->response("Parametros GET incorrectos", 400); //
             }
         }else{
-            $monsters = $this->model->getAll();
+            $pacientes = $this->model->getAll();
             // si 'page' y 'limit' son de tipo int, selecciono la pagina indicada
             if((is_int($page))&(is_int($limit))){
-                $monsters = array_slice($monsters, $page*$limit, $limit);
+                $pacientes = array_slice($pacientes, $page*$limit, $limit);
             }
-            $this->view->response($monsters);
+            $this->view->response($pacientes);
         }
     }
 
