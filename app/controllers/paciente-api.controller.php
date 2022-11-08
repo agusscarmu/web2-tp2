@@ -1,17 +1,19 @@
 <?php
 require_once './app/models/paciente.model.php';
 require_once './app/views/view.api.php';
+require_once './app/helpers/auth-api.helper.php';
 
 class PacienteApiController {
     private $model;
     private $view;
+    private $helper;
 
     private $data;
 
     public function __construct() {
         $this->model = new PacienteModel();
         $this->view = new ApiView();
-        
+        $this->helper = new AuthApiHelper();
         // lee el body del request
         $this->data = file_get_contents("php://input");
     }
@@ -21,8 +23,32 @@ class PacienteApiController {
     }
 
     public function getPacientes($params = null) {
-        $px = $this->model->getAll();
-        $this->view->response($px);
+        $order = $_GET['order'];
+        $direction = $_GET['direction'];
+        // verifico que exista 'page' y 'limit' para transformarlo en int
+        if(isset($_GET['page'])&&isset($_GET['limit'])){
+            $page = (int) $_GET['page'];
+            $limit = (int) $_GET['limit'];
+        }
+        if(!$order==null){
+            if ((in_array($order,$this->model->getColumns())&&(($direction==null)||($direction=='ASC')||($direction=='DESC')))) { // compruebo que el get obtenido sea correcto
+                $pacientes = $this->model->getAllOrderBy($order, $direction);
+                // si 'page' y 'limit' son de tipo int, selecciono la pagina indicada
+                if((is_int($page))&(is_int($limit))){
+                    $pacientes = array_slice($pacientes, $page*$limit, $limit);
+                }
+                $this->view->response($pacientes);
+            }else{
+                $this->view->response("Parametros GET incorrectos", 400); //
+            }
+        }else{
+            $monsters = $this->model->getAll();
+            // si 'page' y 'limit' son de tipo int, selecciono la pagina indicada
+            if((is_int($page))&(is_int($limit))){
+                $monsters = array_slice($monsters, $page*$limit, $limit);
+            }
+            $this->view->response($monsters);
+        }
     }
 
     public function getPaciente($params = null) {
@@ -49,6 +75,11 @@ class PacienteApiController {
     }
 
     public function insertPaciente($params = null) {
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
+
         $paciente = $this->getData();
 
         if (empty($paciente->nombre) || empty($paciente->edad) || empty($paciente->dni) || empty($paciente->motivo) || empty($paciente->obrasocial) ) {
@@ -61,6 +92,11 @@ class PacienteApiController {
     }
 
     public function updatePaciente($params=null){
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
+
         $id = $params[':ID'];
         $paciente = $this->getData();
         

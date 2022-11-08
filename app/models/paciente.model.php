@@ -2,10 +2,16 @@
 
 class PacienteModel {
 
-    public $db;
+    private $db;
+    private $columns;
 
     public function __construct() {
         $this->db = new PDO('mysql:host=localhost;'.'dbname=consultorio;charset=utf8', 'root', '');
+        $this->columns = array('id', 'nombre', 'edad', 'dni', 'motivo', 'obrasocial');
+    }
+
+    public function getColumns(){
+        return $this->columns;
     }
 
     public function getAll() {
@@ -14,18 +20,23 @@ class PacienteModel {
 
         // 2. ejecuto la sentencia (2 subpasos)
         $query = $this->db->prepare("SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as obrasocial 
-
-        FROM pacientes 
-
-        INNER JOIN obrasocial ON (pacientes.ID_obrasocial=obrasocial.id) 
-        
-        ORDER BY id DESC LIMIT 10");
+                                    FROM pacientes 
+                                    INNER JOIN obrasocial ON (pacientes.ID_obrasocial=obrasocial.id)");
         $query->execute();
 
         // 3. obtengo los resultados
         $paciente = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
         
         return $paciente;
+    }
+
+    public function getAllOrderBy($order, $direction= 'ASC'){
+        $query = $this->db->prepare('SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as obrasocial 
+                                    FROM pacientes 
+                                    INNER JOIN obrasocial ON (pacientes.ID_obrasocial=obrasocial.id) 
+                                    ORDER BY '.$order.' '.$direction);
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
     public function get($id) {

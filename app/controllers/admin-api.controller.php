@@ -1,17 +1,23 @@
 <?php
 require_once './app/models/admin.model.php';
 require_once './app/views/view.api.php';
+require_once './app/helpers/auth-api.helper.php';
 
-class AdminApiController {
+function base64url_encode($data) {
+    return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+}
+
+
+class AuthApiController {
     private $model;
     private $view;
+    private $authHelper;
 
     private $data;
 
     public function __construct() {
-        $this->model = new PacienteModel();
         $this->view = new ApiView();
-        $this->helper = new AuthApiHelper();
+        $this->authHelper = new AuthApiHelper();
         
         // lee el body del request
         $this->data = file_get_contents("php://input");
@@ -21,7 +27,46 @@ class AdminApiController {
         return json_decode($this->data);
     }
 
-    public function getToken($params=null){
+    public function getToken($params = null) {
+        $basic = $this->authHelper->getAuthHeader();
+        
+        if(empty($basic)){
+            $this->view->response('No autorizado', 401);
+            return;
+        }
+        $basic = explode(" ",$basic); 
+        if($basic[0]!="Basic"){
+            $this->view->response('La autenticación debe ser Basic', 401);
+            return;
+        }
 
+        //validar usuario:contraseña
+        $userpass = base64_decode($basic[1]); 
+        $userpass = explode(":", $userpass);
+        $user = $userpass[0];
+        $pass = $userpass[1];
+        if($user == "admin" && $pass == "admin"){
+            //  crear un token
+            $header = array(
+                'alg' => 'HS256',
+                'typ' => 'JWT'
+            );
+            $payload = array(
+                'id' => 1,
+                'name' => "admin",
+                'exp' => time()+12000
+            );
+            $header = base64url_encode(json_encode($header));
+            $payload = base64url_encode(json_encode($payload));
+            // Token creado a partir de header - payload - key
+            $signature = hash_hmac('SHA256', "$header.$payload", "Key123", true);
+            $signature = base64url_encode($signature);
+            $token = "$header.$payload.$signature";
+             $this->view->response($token);
+        }else{
+            $this->view->response('No autorizado', 401);
+        }
     }
+
+
 }

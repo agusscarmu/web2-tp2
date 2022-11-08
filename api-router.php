@@ -12,7 +12,7 @@ $router->addRoute('pacientes/:ID', 'GET', 'PacienteApiController', 'getPaciente'
 $router->addRoute('pacientes/:ID', 'DELETE', 'PacienteApiController', 'deletePaciente');
 $router->addRoute('pacientes', 'POST', 'PacienteApiController', 'insertPaciente'); 
 $router->addRoute('pacientes/:ID', 'PUT', 'PacienteApiController', 'updatePaciente'); 
-$router->addRoute('admin/token', 'PUT', 'AdminApiController', 'getToken'); 
+$router->addRoute('admin/token', 'GET', 'AuthApiController', 'getToken'); 
 
 // ejecuta la ruta (sea cual sea)
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);
