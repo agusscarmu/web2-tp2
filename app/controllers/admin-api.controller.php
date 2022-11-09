@@ -18,6 +18,7 @@ class AuthApiController {
     public function __construct() {
         $this->view = new ApiView();
         $this->authHelper = new AuthApiHelper();
+        $this->model = new adminModel();
         
         // lee el body del request
         $this->data = file_get_contents("php://input");
@@ -45,15 +46,17 @@ class AuthApiController {
         $userpass = explode(":", $userpass);
         $user = $userpass[0];
         $pass = $userpass[1];
-        if($user == "admin" && $pass == "admin"){
+        $medico = $this->model->insertLogin($user);
+
+        if($medico && password_verify($pass, $medico->pass)){
             //  crear un token
             $header = array(
                 'alg' => 'HS256',
                 'typ' => 'JWT'
             );
             $payload = array(
-                'id' => 1,
-                'name' => "admin",
+                'id' => $medico->ID,
+                'name' => $medico->nombre,
                 'exp' => time()+12000
             );
             $header = base64url_encode(json_encode($header));
@@ -62,7 +65,7 @@ class AuthApiController {
             $signature = hash_hmac('SHA256', "$header.$payload", "Key123", true);
             $signature = base64url_encode($signature);
             $token = "$header.$payload.$signature";
-             $this->view->response($token);
+            $this->view->response($token);
         }else{
             $this->view->response('No autorizado', 401);
         }

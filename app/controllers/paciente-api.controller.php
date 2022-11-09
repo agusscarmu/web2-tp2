@@ -109,7 +109,14 @@ class PacienteApiController {
         } else {
             $px = $this->model->get($id);
             if ($px) {
-                $this->model->update($id, $paciente->nombre, $paciente->edad, $paciente->dni, $paciente->motivo, $paciente->obrasocial);
+                if($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png"){
+                    $imagen=$_FILES['imagen']['tmp_name'];
+                    $this->model->update($id, $paciente->nombre, $paciente->edad, $paciente->dni, $paciente->motivo, $paciente->obrasocial, $imagen);
+                }
+                   
+                else{
+                    $this->model->update($id, $paciente->nombre, $paciente->edad, $paciente->dni, $paciente->motivo, $paciente->obrasocial);
+                }
                 $this->view->response($px);
             } else {
                 $this->view->response("El paciente con el id=$id no existe", 404); 

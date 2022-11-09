@@ -19,7 +19,7 @@ class PacienteModel {
         // ya esta abierta por el constructor de la clase
 
         // 2. ejecuto la sentencia (2 subpasos)
-        $query = $this->db->prepare("SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as obrasocial 
+        $query = $this->db->prepare("SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, pacientes.imagen, obrasocial.nombre as obrasocial
                                     FROM pacientes 
                                     INNER JOIN obrasocial ON (pacientes.ID_obrasocial=obrasocial.id)");
         $query->execute();
@@ -52,15 +52,29 @@ class PacienteModel {
         $query->execute([$id]);
     }
 
-    public function insert($nombre, $dni, $edad, $motivo, $obrasocial){
+    public function insert($nombre, $edad, $dni, $motivo, $obrasocial){
         $query = $this->db->prepare("INSERT INTO pacientes (nombre, edad, dni, motivo, ID_obrasocial) VALUES (?, ?, ?, ?, ?)");
         $query->execute([$nombre, $edad, $dni, $motivo, $obrasocial]);
 
         return $this->db->lastInsertId();
     }
 
-    public function update ($id, $nombre, $dni, $edad, $motivo, $obrasocial){
-        $query= $this->db->prepare("UPDATE pacientes SET nombre=?,edad=?,dni=?,motivo=?,ID_obrasocial=? WHERE id=? ");
-        $query-> execute([$nombre, $edad, $dni, $motivo, $obrasocial,$id]);  
+    public function update ($id, $nombre, $edad, $dni, $motivo, $obrasocial,$imagen=null){
+        $pathImg = null;
+
+        if ($imagen){
+            $pathImg = $this->subirImagen($imagen);
+        $query = $this->db->prepare("UPDATE pacientes SET nombre=?,edad=?,dni=?,motivo=?,imagen=?,ID_obrasocial=? WHERE id=?");
+        $query -> execute([$nombre, $edad, $dni, $motivo, $pathImg, $obrasocial, $id]);}
+        else{  
+        $query = $this->db->prepare("UPDATE pacientes SET nombre=?,edad=?,dni=?,motivo=?,ID_obrasocial=? WHERE id=?");
+        $query -> execute([$nombre, $edad, $dni, $motivo, $obrasocial, $id]);}
+    }
+    
+    private function subirImagen($imagen){
+        $temporal = './imgs/' . uniqid() . '.jpg';
+        move_uploaded_file($imagen, $temporal);
+        return $temporal;
+
     }
 }
