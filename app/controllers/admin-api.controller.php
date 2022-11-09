@@ -57,7 +57,7 @@ class AuthApiController {
             $payload = array(
                 'id' => $medico->ID,
                 'name' => $medico->nombre,
-                'exp' => time()+12000
+                'exp' => time()+3600
             );
             $header = base64url_encode(json_encode($header));
             $payload = base64url_encode(json_encode($payload));
