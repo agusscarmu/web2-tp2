@@ -23,21 +23,46 @@ class PacienteApiController {
     }
 
     public function getPacientes($params = null) {
+        $sort = $_GET['sort'];
         $order = $_GET['order'];
-        $direction = $_GET['direction'];
         $page = $_GET['page'];
         $limit = $_GET['limit'];
-    
-        if(!$order==null){
-            if ((in_array($order,$this->model->getColumns())&&(($direction==null)||($direction=='ASC')||($direction=='DESC')))) { // compruebo que el get obtenido sea correcto
-                $pacientes = $this->model->getAllOrderBy($order, $direction);
-                $this->parametros($pacientes,$page,$limit);
+        $obrasocial = $_GET['obrasocial'];
+
+        if(isset($obrasocial)){
+            if(!$sort==null){
+                // compruebo que el get obtenido sea correcto
+                if ((in_array($order,$this->model->getColumns())&&(($order==null)||($order=='ASC')||($order=='DESC')))) {
+                    $pacientes = $this->model->filterOrderByOs($obrasocial, $sort, $order);
+                    if(empty($pacientes)){
+                    $this->view->response("Obra social no existe", 400);
+                    }else{
+                    $this->parametros($pacientes, $page, $limit);
+                    }
+                }else{
+                    $this->view->response("Parametros GET incorrectos", 400);
+                }
             }else{
-                $this->view->response("Parametros GET incorrectos", 400); //
+                $pacientes = $this->model->filterByOs($obrasocial);
+                if(empty($pacientes)){
+                    $this->view->response("Obra social no existe", 400);
+                }else{
+                    $this->parametros($pacientes, $page, $limit);
+                }
             }
-        }else{
-            $pacientes = $this->model->getAll();
-            $this->parametros($pacientes,$page,$limit);
+        }
+        else{
+            if (!$sort==null){
+                if ((in_array($sort,$this->model->getColumns())&&(($order==null)||($order=='ASC')||($order=='DESC')))) { // compruebo que el get obtenido sea correcto
+                    $pacientes = $this->model->getAllOrderBy($sort, $order);
+                    $this->parametros($pacientes,$page,$limit);
+                }else{
+                    $this->view->response("Parametros GET incorrectos", 400); //
+                }
+            }else{
+                $px = $this->model->getAll();
+                $this->parametros($px,$page,$limit);
+            }
         }
     }
 
@@ -45,8 +70,8 @@ class PacienteApiController {
         if(isset($page)&&isset($limit)){
             // valido que el page y limit sean integer
             if ((filter_var($page, FILTER_VALIDATE_INT)!== false)&&(filter_var($limit, FILTER_VALIDATE_INT) !== false)){
-              $list = array_slice($pacientes, $page*$limit, $limit);
-              $this->view->response($list);
+              $px = array_slice($pacientes, $page*$limit, $limit);
+              $this->view->response($px);
             }else{
                 $this->view->response("Pagina o limite no especificados", 400); //
             }

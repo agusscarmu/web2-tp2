@@ -46,7 +46,7 @@ class AuthApiController {
         $userpass = explode(":", $userpass);
         $user = $userpass[0];
         $pass = $userpass[1];
-        $medico = $this->model->insertLogin($user);
+        $medico = $this->model->login($user);
 
         if($medico && password_verify($pass, $medico->pass)){
             //  crear un token
