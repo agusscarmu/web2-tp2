@@ -68,6 +68,11 @@ class OsApiController {
     }
 
     public function deleteObra($params = null) {
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
+        
         $id = $params[':ID'];
 
         $os = $this->model->get($id);

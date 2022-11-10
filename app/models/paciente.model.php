@@ -48,11 +48,11 @@ class PacienteModel {
         return $px;
     }
 
-    public function filterOrderByOs($obrasocial, $sort, $order){
-        $query = $this->db->prepare("SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as nombre2
+    public function filterOrderByOs($obrasocial, $sort, $order= 'ASC'){
+        $query = $this->db->prepare('SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as nombre2
                                     FROM pacientes                       
                                     INNER JOIN obrasocial ON (pacientes.ID_obrasocial=obrasocial.id)  WHERE obrasocial.nombre = ?
-                                    ORDER BY '.$sort.' '.$order");
+                                    ORDER BY '.$sort.' '.$order);
         $query -> execute([$obrasocial]);
         $px = $query->fetchAll(PDO::FETCH_OBJ);
         return $px;

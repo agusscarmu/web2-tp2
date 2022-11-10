@@ -32,7 +32,7 @@ class PacienteApiController {
         if(isset($obrasocial)){
             if(!$sort==null){
                 // compruebo que el get obtenido sea correcto
-                if ((in_array($order,$this->model->getColumns())&&(($order==null)||($order=='ASC')||($order=='DESC')))) {
+                if ((in_array($sort,$this->model->getColumns())&&(($order==null)||($order=='ASC')||($order=='DESC')))) {
                     $pacientes = $this->model->filterOrderByOs($obrasocial, $sort, $order);
                     if(empty($pacientes)){
                     $this->view->response("Obra social no existe", 400);
@@ -93,6 +93,11 @@ class PacienteApiController {
     }
 
     public function deletePaciente($params = null) {
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
+        
         $id = $params[':ID'];
 
         $px = $this->model->get($id);
