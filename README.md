@@ -12,11 +12,11 @@ El endpoint de la api es: http://localhost/(tucarpetalocal)/TPE2/api/pacientes
 
 A continuacion se desarrollaran los distintos recursos con los que cuenta esta Api y sus funcionalidades.
 
-### * Router
+* ### Router
 
 El router brinda distintos metodos para acceder a las distintas funciones.
 
-#### Metodos Publicos:
+#### **Metodos Publicos**:
 
 1. **_Metodo GET_** -> Con GET se logra traer y mostrar la tabla a la que estamos refiriendo. Existe la posibilidad de hacer un llamado con mayor especificidad utilizando distintos parametros como los que se detallaran a continuacion con algunos ejemplos
 
@@ -32,7 +32,7 @@ El router brinda distintos metodos para acceder a las distintas funciones.
 
     * *Ingreso*: Es posible ingresar como usuario "Admin" en donde una vez hecho el login con la URL: "*URL/admin/token*", se generara un Token el cual habilitara el ingreso a las funciones a continuacion
 
-#### Metodos Privados (requieren Token):
+#### **Metodos Privados (requieren Token)**:
 
 2. **_Metodo POST_** -> Con POST existe la posibilidad de agregar elementos a la tabla. Es posible utilizar este metodo tanto en la tabla de pacientes, de obras sociales o de historia clinica. Para cada tabla sera necesario disponer de un formulario adecuado a los campos necesarios de cada una.
 
@@ -43,6 +43,9 @@ El router brinda distintos metodos para acceder a las distintas funciones.
 4. **_Metodo DELETE_** -> Con este metodo sera posible eliminar elementos de la tabla, para esto es necesario tomar como parametro el ID de dicho elemento y eliminarlo mediante SQL. Ejemplo: *URL/pacientes/(id)*
 
 
+* ### Token
+
+La API cuenta con un sistema de autentificacion por token para acceder a funciones privadas como POST, PUT y DELETE. Para obtenerlo es necesario hacer un login mediante autentificacion Basic (el usuario debe estar ingresado en la tabla "medicos"), una vez hecho el login se generara un token con una firma privada al final de este, el mismo contara con un tiempo de duracion de 3600 segundos = 60 minutos. El token debera ser ingresado en la autentificacion Bearer Token para poder ejercer las funciones de administrador.
 
 
 

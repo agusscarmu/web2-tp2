@@ -2,6 +2,7 @@
 require_once './libs/router.php';
 require_once './app/controllers/paciente-api.controller.php';
 require_once './app/controllers/os-api.controller.php';
+require_once './app/controllers/historiaclinica-api.controller.php';
 require_once './app/controllers/admin-api.controller.php';
 
 // crea el router
@@ -19,6 +20,12 @@ $router->addRoute('obrasocial/:ID', 'GET', 'OsApiController', 'getObra');
 $router->addRoute('obrasocial/:ID', 'DELETE', 'OsApiController', 'deleteObra');
 $router->addRoute('obrasocial', 'POST', 'OsApiController', 'insertObra'); 
 $router->addRoute('obrasocial/:ID', 'PUT', 'OsApiController', 'updateObra'); 
+
+$router->addRoute('historiaclinica', 'GET', 'HcApiController', 'getHistoriasClinicas');
+$router->addRoute('historiaclinica/:ID', 'GET', 'HcApiController', 'getHc');
+$router->addRoute('historiaclinica/:ID', 'DELETE', 'HcApiController', 'deleteHc');
+$router->addRoute('historiaclinica', 'POST', 'HcApiController', 'insertHc'); 
+$router->addRoute('historiaclinica/:ID', 'PUT', 'HcApiController', 'updateHc'); 
 
 $router->addRoute('admin/token', 'GET', 'AuthApiController', 'getToken'); 
 

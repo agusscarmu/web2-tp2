@@ -28,8 +28,8 @@ class OsModel {
         return $paciente;
     }
 
-    public function getAllOrderBy($order, $direction= 'ASC'){
-        $query = $this->db->prepare('SELECT*FROM obrasocial ORDER BY '.$order.' '.$direction);
+    public function getAllOrderBy($sort, $order= 'ASC'){
+        $query = $this->db->prepare('SELECT*FROM obrasocial ORDER BY '.$sort.' '.$order);
         $query->execute();
         return $query->fetchAll(PDO::FETCH_OBJ);
     }

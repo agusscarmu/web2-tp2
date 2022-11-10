@@ -40,7 +40,7 @@ class PacienteModel {
     }
 
     public function filterByOs($obrasocial){
-        $query = $this->db->prepare("SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as nombre2
+        $query = $this->db->prepare("SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as obrasocial
                                     FROM pacientes                       
                                     INNER JOIN obrasocial ON (pacientes.ID_obrasocial=obrasocial.id)  WHERE obrasocial.nombre = ?");
         $query -> execute([$obrasocial]);
@@ -49,7 +49,7 @@ class PacienteModel {
     }
 
     public function filterOrderByOs($obrasocial, $sort, $order= 'ASC'){
-        $query = $this->db->prepare('SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as nombre2
+        $query = $this->db->prepare('SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as obrasocial
                                     FROM pacientes                       
                                     INNER JOIN obrasocial ON (pacientes.ID_obrasocial=obrasocial.id)  WHERE obrasocial.nombre = ?
                                     ORDER BY '.$sort.' '.$order);
@@ -59,7 +59,9 @@ class PacienteModel {
     }
 
     public function get($id) {
-        $query = $this->db->prepare("SELECT * FROM pacientes WHERE id = ?");
+        $query = $this->db->prepare("SELECT pacientes.id, pacientes.nombre, pacientes.edad, pacientes.dni, pacientes.motivo, obrasocial.nombre as obrasocial
+                                    FROM pacientes                       
+                                    INNER JOIN obrasocial ON (pacientes.ID_obrasocial=obrasocial.id) WHERE pacientes.id = ?");
         $query->execute([$id]);
         $paciente = $query->fetch(PDO::FETCH_OBJ);
         

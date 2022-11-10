@@ -12,14 +12,14 @@ class AuthApiController {
     private $model;
     private $view;
     private $authHelper;
-
+    private $key;
     private $data;
 
     public function __construct() {
         $this->view = new ApiView();
         $this->authHelper = new AuthApiHelper();
         $this->model = new adminModel();
-        
+        $this->key = "spectrosorctakezohanzo";
         // lee el body del request
         $this->data = file_get_contents("php://input");
     }
@@ -62,7 +62,7 @@ class AuthApiController {
             $header = base64url_encode(json_encode($header));
             $payload = base64url_encode(json_encode($payload));
             // Token creado a partir de header - payload - key
-            $signature = hash_hmac('SHA256', "$header.$payload", "Key123", true);
+            $signature = hash_hmac('SHA256', "$header.$payload", $this->key, true);
             $signature = base64url_encode($signature);
             $token = "$header.$payload.$signature";
             $this->view->response($token);
