@@ -141,7 +141,7 @@ class HcApiController {
                 $this->model->update($id, $hc->paciente, $hc->servicio_de_atencion, $hc->historia_clinica, $hc->fecha);
                 $this->view->response($hc);
             }else {
-                $this->view->response("La hc con el id=$id no existe", 404); 
+                $this->view->response("No se encontro ninguna historia clinica", 404); 
             }
         }
     }
