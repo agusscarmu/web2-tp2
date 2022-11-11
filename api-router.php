@@ -4,6 +4,7 @@ require_once './app/controllers/paciente-api.controller.php';
 require_once './app/controllers/os-api.controller.php';
 require_once './app/controllers/historiaclinica-api.controller.php';
 require_once './app/controllers/admin-api.controller.php';
+require_once './app/controllers/defaultRespond-api.controller.php';
 
 // crea el router
 $router = new Router();
@@ -29,5 +30,6 @@ $router->addRoute('historiaclinica/:ID', 'PUT', 'HcApiController', 'updateHc');
 
 $router->addRoute('admin/token', 'GET', 'AuthApiController', 'getToken'); 
 
+$router->setDefaultRoute('defaultRoute', 'default');
 // ejecuta la ruta (sea cual sea)
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);

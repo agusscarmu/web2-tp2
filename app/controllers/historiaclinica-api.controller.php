@@ -133,12 +133,12 @@ class HcApiController {
         $id = $params[':ID'];
         $hc = $this->getData();
         
-        if (empty($hc->paciente) || empty($hc->servicio_de_atencion) || empty($hc->historia_clinica) || empty($hc->fecha)) {
+        if (empty($hc->servicio_de_atencion) || empty($hc->historia_clinica) || empty($hc->fecha)) {
             $this->view->response("Complete los datos", 400);
         } else {
             $historiaclinica = $this->model->get($id);
             if ($historiaclinica) {
-                $this->model->update($id, $hc->paciente, $hc->servicio_de_atencion, $hc->historia_clinica, $hc->fecha);
+                $this->model->update($id, $hc->servicio_de_atencion, $hc->historia_clinica, $hc->fecha);
                 $this->view->response($hc);
             }else {
                 $this->view->response("No se encontro ninguna historia clinica", 404); 

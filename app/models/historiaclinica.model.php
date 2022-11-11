@@ -79,9 +79,9 @@ class HcModel {
         return $this->db->lastInsertId();
     }
 
-    public function update ($id, $paciente, $servicio, $historiaclinica, $fecha){
-        $query = $this->db->prepare("UPDATE historiaclinica SET ID_pacientes=?,servicio_de_atencion=?,historia_clinica=?,fecha=? WHERE id=?");
-        $query -> execute([$paciente, $servicio, $historiaclinica, $fecha, $id]);}
+    public function update ($id, $servicio, $historiaclinica, $fecha){
+        $query = $this->db->prepare("UPDATE historiaclinica SET servicio_de_atencion=?,historia_clinica=?,fecha=? WHERE id=?");
+        $query -> execute([$servicio, $historiaclinica, $fecha, $id]);}
 
 }
     
