@@ -22,31 +22,31 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
 
     * *Filtrar por ID*: Es posible obtener e inspeccionar un elemento obteniendo la ID de este. Para esto es necesario tomar como parametro la ID del elemento que se quiera inspeccionar, este parametro es tomado por el controlador de la tabla a la que estemos llamando y llevado al modelo de la misma, conectandose con la base de datos y trayendo el resultado. La URL quedaria de esta forma en caso de inspeccionar un paciente: 
     
-        *URL/pacientes/(id)*
+            *URL/pacientes/(id)*
 
     * *Ordenar por Sort*: Con el parametro Sort es posible reordenar la tabla en base a una columna que el usuario especifique, de manera predeterminada una vez reordenada la lista mediante un sort la tabla se mostrara de manera ascendente. Tanto en la tabla de pacientes como obra social es posible la utilizacion de este parametro. Una URL de ejemplo en la cual se solicita reordenar por nombre seria la siguiente: 
     
-        *URL/pacientes?sort=nombre*
+            *URL/pacientes?sort=nombre*
 
     * *Ordenar por Order*: Con el parametro Order es posible cambiarle el orden a la columna a la que llamamos por "Sort", este orden puede ser Ascendente (ASC) o Descendente (DESC), en caso de no asignar ningun valor este sera Ascendente por defecto. Un ejemplo de como quedaria la URL seria el siguiente: 
     
-        *URL/pacientes?sort=nombre&order=DESC*
+            *URL/pacientes?sort=nombre&order=DESC*
 
     * *Filtrar por Obra Social*: Es posible hacer un filtrado de pacientes por obra social. Para esto se usa el parametro "obrasocial" seguido del nombre de la obra social a la que queremos filtrar y nos devolvera una lista de los pacientes que pertenezcan a esta. Ejemplo de URL: 
     
-        *URL/pacientes?obrasocial=Osde*
+            *URL/pacientes?obrasocial=Osde*
 
     * *Filtrar Historia Clinica por Paciente*: Es posible hacer un filtrado de historias clinicas por paciente. Para esto se usa el parametro "paciente" seguido del nombre del mismo y nos devolvera una lista de las historias clinicas que pertenezcan a dicho paciente. Ejemplo de URL: 
     
-        *URL/historiaclinica?paciente=Matias*
+            *URL/historiaclinica?paciente=Matias*
 
     * *Paginacion*: Tambien existe la posibilidad de "paginar" la lista tanto de pacientes como de obra social, poniendo "page" para determinar en que pagina desea situarse (siendo 0 la primer pagina) y "limit" para establecer el limite de elementos que se desee mostrar por pagina. Un ejemplo de URL para este caso seria el siguiente: 
     
-        *URL/pacientes?sort=nombre&order=DESC&page=0&limit=2*
+            *URL/pacientes?sort=nombre&order=DESC&page=0&limit=2*
 
     * *Ingreso*: Es posible ingresar como usuario "Admin" en donde una vez hecho el login se generara un Token el cual habilitara el ingreso a las funciones a continuacion. Un ejemplo de la URL: 
     
-        *URL/admin/token* 
+            *URL/admin/token* 
 
 #### **Metodos Privados (requieren Token)**:
 
