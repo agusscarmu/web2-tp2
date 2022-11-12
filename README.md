@@ -4,24 +4,26 @@
 
 La siguiente Api fue desarrollada y pensada para ser utilizada en un sistema web de un hospital para el control y el seguimiento de los pacientes. Contando con diversas funciones para un control amplio y tambien con una conexion a una base de datos la cual contiene tablas de pacientes, obras sociales, historias clinicas, y tambien una tabla de usuarios administradores para poder ejercer ciertas funciones.
 
-### Postman
-
-El endpoint de la api es: http://localhost/(tucarpetalocal)/TPE2/api/pacientes
-
 ## Recursos de la API
 
 A continuacion se desarrollaran los distintos recursos con los que cuenta esta Api y sus funcionalidades.
+
+* ## Base de datos
+
+Se encuentra en la carpeta "database", sera necesario importar esta base de datos para el funcionamiento de la API.
 
 * ## Router
 
 El router brinda distintos metodos para acceder a las distintas funciones. Este esta vinculado a una libreria la cual provee todas las operaciones necesarias para que los metodos y parametros sean ejecutados.
 
-            Las rutas establecidas son:
+            Endpoints:
 
-            * URL/pacientes
-            * URL/obrasocial
-            * URL/historiaclinica
-            * URL/admin/token
+            * http://localhost/(tucarpetalocal)/TPE2/api/pacientes
+            * http://localhost/(tucarpetalocal)/TPE2/api/obrasocial
+            * http://localhost/(tucarpetalocal)/TPE2/api/historiaclinica
+            * http://localhost/(tucarpetalocal)/TPE2/api/admin/token
+
+            Se recomienda la utilizacion de Postman para la visualizacion del funcionamiento.
 
 #### **Metodos Publicos**:
 
@@ -34,9 +36,9 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
 
             Se reemplaza el "(id)" por el id que se desee filtrar
         
-        * Los codigos de errores de respuesta pueden ser:
+    * Los codigos de errores de respuesta pueden ser:
 
-        -> 404 "Not found" en caso de no exista el ID solicitado.
+    - 404 "Not found" en caso de no exista el ID solicitado.
 
 
     * ##### *Ordenar por "Sort"*: 
@@ -46,9 +48,9 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
 
             sort= Se establece el nombre de columna por el cual se desea reordenar
 
-        * Los codigos de errores de respuesta pueden ser:
+    * Los codigos de errores de respuesta pueden ser:
 
-        -> 400 "Bad request" en caso de que la columna solicitada no exista.
+    - 400 "Bad request" en caso de que la columna solicitada no exista.
 
 
     * ##### *Ordenar por "Order"*: 
@@ -58,9 +60,9 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
 
             order= Se establece el orden, puede ser ascendente o descendente (en caso de no establecerse el orden por defecto en ascendente)
 
-        * Los codigos de errores de respuesta pueden ser:
+    * Los codigos de errores de respuesta pueden ser:
 
-        -> 400 "Bad request" en caso de que se pase un parametro no existente. Recordar que los unicos posibles son ASC y DESC.
+    - 400 "Bad request" en caso de que se pase un parametro no existente. Recordar que los unicos posibles son ASC y DESC.
 
 
     * ##### *Filtrar por Obra Social*: 
@@ -70,9 +72,9 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
 
             obrasocial= Se ingresa el nombre de la obra social al que se desee visualizar los pacientes que esta incluye.
 
-        * Los codigos de errores de respuesta pueden ser:
+    * Los codigos de errores de respuesta pueden ser:
 
-        -> 400 "Bad request" en caso de que la obra social no exista.
+    - 400 "Bad request" en caso de que la obra social no exista.
 
 
     * ##### *Filtrar Historia Clinica por Paciente*: 
@@ -82,9 +84,9 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
 
             paciente= Se ingresa el nombre del paciente al que se desee visualizar las historias clinicas.
 
-        * Los codigos de errores de respuesta pueden ser:
+    * Los codigos de errores de respuesta pueden ser:
 
-        -> 400 "Bad request" en caso de que el nombre del paciente no exista.
+    - 400 "Bad request" en caso de que el nombre del paciente no exista.
 
 
     * ##### *Paginacion*: 
@@ -96,9 +98,9 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
             limit= el limite de elementos que se desee visualizar por pagina.
             
 
-        * Los codigos de errores de respuesta pueden ser:
+    * Los codigos de errores de respuesta pueden ser:
 
-        -> 400 "Bad request" en caso de parametros mal pasados en la URL (como por ejemplo una letra en lugar de un numero).
+    - 400 "Bad request" en caso de parametros mal pasados en la URL (como por ejemplo una letra en lugar de un numero).
 
 
     * ##### *Ingreso*: 
@@ -106,9 +108,9 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
     
             URL/admin/token 
 
-        * Los codigos de errores de respuesta pueden ser:
+    * Los codigos de errores de respuesta pueden ser:
 
-        -> 401 "Unauthorized" en caso de un login erroneo o que la autentificacion no sea Basic.
+    - 401 "Unauthorized" en caso de un login erroneo o que la autentificacion no sea Basic.
 
 
 #### **Metodos Privados (requieren Token)**:
@@ -117,32 +119,32 @@ El router brinda distintos metodos para acceder a las distintas funciones. Este 
 
 La API esta preparada para poder agregar imagenes de los estudios hechos en los pacientes como por ejemplo Rx, Resonancias magneticas, tomografias, etc.
 
-    * Los codigos de errores de respuesta pueden ser:
+* Los codigos de errores de respuesta pueden ser:
 
-    -> 401 "Unauthorized" en caso de intentar hacer POST sin Token.
-    -> 400 "Bad request" en caso de no completar los campos con los datos a enviar.
+- 401 "Unauthorized" en caso de intentar hacer POST sin Token.
+- 400 "Bad request" en caso de no completar los campos con los datos a enviar.
 
 
 3. **_Metodo PUT_** -> Este metodo permite al usuario poder modificar algun elemento de la tabla sin necesidad de eliminarlo y agregarlo nuevamente. Para esto sera necesario utilizar el ID del elemento que se quiera modificar como parametro para que pueda ser llamado y actualizado por la base de datos. Ejemplo: 
     
         URL/obrasocial/(id)
 
-    * Los codigos de errores de respuesta pueden ser:
+* Los codigos de errores de respuesta pueden ser:
 
-    -> 404 "Not found" en caso de solicitar una actualizacion del ID de un paciente, obra social, o historia clinica que no exista.
-    -> 401 "Unauthorized" en caso de intentar hacer PUT sin Token.
-    -> 400 "Bad request" en caso de no completar los campos con los datos a actualizar.
+- 404 "Not found" en caso de solicitar una actualizacion del ID de un paciente, obra social, o historia clinica que noexista.
+- 401 "Unauthorized" en caso de intentar hacer PUT sin Token.
+- 400 "Bad request" en caso de no completar los campos con los datos a actualizar.
 
 
 4. **_Metodo DELETE_** -> Con este metodo sera posible eliminar elementos de la tabla, para esto es necesario tomar como parametro el ID de dicho elemento y eliminarlo mediante SQL. Ejemplo: 
     
         URL/pacientes/(id)
 
-    * Los codigos de errores de respuesta pueden ser:
+* Los codigos de errores de respuesta pueden ser:
 
-    -> 404 "Not found" en caso de solicitar la eliminacion del ID de un paciente, obra social o historia clinica que no exista.
-    -> 401 "Unauthorized" en caso de intentar hacer DELETE sin Token.
-    -> 400 "Bad request" en caso de no completar los campos con los datos a enviar.
+- 404 "Not found" en caso de solicitar la eliminacion del ID de un paciente, obra social o historia clinica que no exista.
+- 401 "Unauthorized" en caso de intentar hacer DELETE sin Token.
+- 400 "Bad request" en caso de no completar los campos con los datos a enviar.
 
 * ## MVC
 
