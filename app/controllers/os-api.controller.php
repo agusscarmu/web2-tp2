@@ -45,6 +45,7 @@ class OsApiController {
         if(isset($page)&&isset($limit)){
             // valido que el page y limit sean integer
             if ((filter_var($page, FILTER_VALIDATE_INT)!== false)&&(filter_var($limit, FILTER_VALIDATE_INT) !== false)){
+                // Con array_slice se establecen los limites para paginacion
               $list = array_slice($obra, $page*$limit, $limit);
               $this->view->response($list);
             }else{
@@ -72,7 +73,7 @@ class OsApiController {
             $this->view->response("No estas logeado", 401);
             return;
         }
-        
+
         $id = $params[':ID'];
 
         $os = $this->model->get($id);

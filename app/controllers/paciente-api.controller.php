@@ -70,6 +70,7 @@ class PacienteApiController {
         if(isset($page)&&isset($limit)){
             // valido que el page y limit sean integer
             if ((filter_var($page, FILTER_VALIDATE_INT)!== false)&&(filter_var($limit, FILTER_VALIDATE_INT) !== false)){
+            // Con array_slice se establecen los limites para paginacion
               $px = array_slice($pacientes, $page*$limit, $limit);
               $this->view->response($px);
             }else{
@@ -97,7 +98,7 @@ class PacienteApiController {
             $this->view->response("No estas logeado", 401);
             return;
         }
-        
+
         $id = $params[':ID'];
 
         $px = $this->model->get($id);

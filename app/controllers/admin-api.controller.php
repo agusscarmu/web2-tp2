@@ -61,7 +61,7 @@ class AuthApiController {
             );
             $header = base64url_encode(json_encode($header));
             $payload = base64url_encode(json_encode($payload));
-            // Token creado a partir de header - payload - key
+            // Token creado a partir de header - payload - key (signature)
             $signature = hash_hmac('SHA256', "$header.$payload", $this->key, true);
             $signature = base64url_encode($signature);
             $token = "$header.$payload.$signature";

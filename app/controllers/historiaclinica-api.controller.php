@@ -28,6 +28,11 @@ class HcApiController {
         $page = $_GET['page'];
         $limit = $_GET['limit'];
         $paciente = $_GET['paciente'];
+
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
         
         if(isset($paciente)){
             if(!$sort==null){
@@ -69,6 +74,7 @@ class HcApiController {
         if(isset($page)&&isset($limit)){
             // valido que el page y limit sean integer
             if ((filter_var($page, FILTER_VALIDATE_INT)!== false)&&(filter_var($limit, FILTER_VALIDATE_INT) !== false)){
+             // Con array_slice se establecen los limites para paginacion
               $list = array_slice($element, $page*$limit, $limit);
               $this->view->response($list);
             }else{
@@ -80,6 +86,10 @@ class HcApiController {
     }
 
     public function getHc($params = null) {
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("No estas logeado", 401);
+            return;
+        }
         // obtengo el id del arreglo de params
         $id = $params[':ID'];
         $hc = $this->model->get($id);
